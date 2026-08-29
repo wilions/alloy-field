@@ -1,0 +1,33 @@
+service_name: alloy-field-mcp
+version: "1.0.0"
+domain: solidification_microstructure_and_grain_texture
+authoritative_capabilities:
+  - tool_id: field_calculate_dendrite_spacing
+    semantic_action: dendrite_spacing
+    contract: "okf://schemas/dendrite-kinetics@1.0"
+    fidelity_tiers: [T1]
+    cost_model:
+      cpu_seconds_p50: 0.05
+      memory_mb: 100
+      parallelizable: true
+    cache_policy: content_addressed
+
+  - tool_id: field_predict_cet
+    semantic_action: cet_grain_fraction
+    contract: "okf://schemas/cet-fraction@1.0"
+    fidelity_tiers: [T1]
+    cost_model:
+      cpu_seconds_p50: 0.1
+      memory_mb: 120
+      parallelizable: true
+    cache_policy: content_addressed
+
+  - tool_id: field_simulate_microstructure_ca
+    semantic_action: microstructure_morphology
+    contract: "okf://schemas/cellular-automata-texture@1.0"
+    fidelity_tiers: [T2]
+    cost_model:
+      cpu_seconds_p50: 8.0
+      memory_mb: 512
+      parallelizable: true
+    cache_policy: content_addressed
