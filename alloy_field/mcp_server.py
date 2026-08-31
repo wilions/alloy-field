@@ -12,7 +12,6 @@ from alloy_field.core.kgt_kinetics import KGTDendriteKinetics
 from alloy_field.core.cet_solver import CETSolver
 from alloy_field.core.cellular_automata import CellularAutomataSolidificationSolver
 from alloy_field.core.texture import TextureAnalyzer
-from alloy_field.adapters.core_adapter import FieldAdapter
 
 
 class FieldMCPServer:
@@ -85,7 +84,7 @@ class FieldMCPServer:
         ca = CellularAutomataSolidificationSolver(nx=nx, ny=ny, dx_um=dx_um)
         ca_res = ca.simulate(thermal_gradient_k_m=g, cooling_rate_k_s=cooling_rate)
         j_index = TextureAnalyzer.calculate_texture_index(ca_res.euler_angles_deg)
-        micro_state = FieldAdapter.ca_result_to_microstructure_state(ca_res)
+        morphology_type = "equiaxed" if ca_res.grain_aspect_ratio < 1.5 else "columnar"
 
         return {
             "grid_shape": [nx, ny],
@@ -94,7 +93,7 @@ class FieldMCPServer:
             "mean_grain_size_um": ca_res.mean_grain_size_um,
             "grain_aspect_ratio": ca_res.grain_aspect_ratio,
             "texture_intensity_index_j": j_index,
-            "morphology_type": micro_state.grains.morphology_type
+            "morphology_type": morphology_type
         }
 
 
